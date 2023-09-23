@@ -1,16 +1,19 @@
 package com.example.demo.helloWorld;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController // @Controller + @ResponseBody
 public class HelloWorldResource {
 
-    @RequestMapping
-    @ResponseBody
+    @RequestMapping("hello-world")
     String HelloWorldView(){
         return "Hello World";
+    }
+
+    @RequestMapping("hello-world-bean")
+    HelloWorld HelloWorldBean(){
+        return new HelloWorld("Hello, everybody!");
     }
 
 }
