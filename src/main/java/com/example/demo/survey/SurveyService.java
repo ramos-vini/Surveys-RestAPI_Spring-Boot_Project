@@ -1,9 +1,12 @@
 package com.example.demo.survey;
 
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@Service
 public class SurveyService {
 
     private static List<Survey> surveys = new ArrayList<>();
@@ -26,6 +29,10 @@ public class SurveyService {
                 "Description of the Survey", questions);
 
         surveys.add(survey);
+    }
+
+    List<Survey> getAllSurveys() {
+        return surveys;
     }
 
 }
