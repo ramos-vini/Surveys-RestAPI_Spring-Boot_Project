@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Survey {
 
-    public Survey(String id, String name, String description, List<Question> questions) {
+    public Survey(int id, String name, String description, List<Question> questions) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -13,12 +13,12 @@ public class Survey {
 
     public Survey() {}
 
-    private String id;
+    private int id;
     private String name;
     private String description;
     private List<Question> questions;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
