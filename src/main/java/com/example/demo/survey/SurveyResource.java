@@ -2,10 +2,7 @@ package com.example.demo.survey;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -16,12 +13,12 @@ public class SurveyResource {
     @Autowired
     private SurveyService surveyService;
 
-    @RequestMapping("surveys")
+    @GetMapping("surveys")
     public List<Survey> getAllSurveys(){
         return surveyService.getAllSurveys();
     }
 
-    @RequestMapping("surveys/{surveyId}")
+    @GetMapping("surveys/{surveyId}")
     public Survey getSurveyById(@PathVariable int surveyId){
 
         Survey survey = surveyService.getSurveyById(surveyId);
@@ -31,12 +28,18 @@ public class SurveyResource {
         return survey;
     }
 
-    @RequestMapping("surveys/{surveyId}/questions")
+    @GetMapping("surveys/{surveyId}/questions")
     public List<Question> getAllQuestionsBySurveyId(@PathVariable int surveyId){
         return surveyService.getAllQuestionsBySurveyId(surveyId);
     }
 
-    @RequestMapping("surveys/{surveyId}/questions/{questionId}")
+    @PostMapping("surveys/{surveyId}/questions")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void addQuestion(@PathVariable int surveyId, @RequestBody Question question){
+        surveyService.addQuestion(surveyId, question);
+    }
+
+    @GetMapping("surveys/{surveyId}/questions/{questionId}")
     public Question getQuestionById(@PathVariable int surveyId, @PathVariable int questionId){
 
         Question question = surveyService.getQuestionById(surveyId, questionId);
