@@ -15,6 +15,8 @@ public class UserDetails {
 
     String role;
 
+    public UserDetails() {}
+
     public UserDetails(String name, String role) {
         this.name = name;
         this.role = role;
