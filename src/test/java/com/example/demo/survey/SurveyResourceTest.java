@@ -1,6 +1,8 @@
 package com.example.demo.survey;
 
+import org.json.JSONException;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -13,25 +15,21 @@ public class SurveyResourceTest {
     @Autowired
     TestRestTemplate template;
 
-    String question1_response = """
+    @Test
+    void getQuestionById_standard() throws JSONException {
+
+        String questionUri = "/surveys/1/questions/1";
+
+        String expectedResponse = """
             {
                 "id": 1,
                 "description": "Most Popular Cloud Platform Today",
-                "options": [
-                    "AWS",
-                    "Azure",
-                    "Google Cloud",
-                    "Oracle Cloud"
-                ],
                 "correctAnswer": "AWS"
             }
             """;
 
-    String question1_uri = "/surveys/1/questions/1";
+        ResponseEntity<String> actualResponse = template.getForEntity(questionUri, String.class);
 
-    @Test
-    void getQuestionById_standard(){
-        ResponseEntity<String> responseEntity = template.getForEntity(question1_uri,String.class);
-        System.out.println(responseEntity.getBody());
+        JSONAssert.assertEquals(expectedResponse, actualResponse.getBody(), false);
     }
 }
