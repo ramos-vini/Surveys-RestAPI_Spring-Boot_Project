@@ -19,6 +19,53 @@ public class SurveyResourceTest {
     TestRestTemplate template;
 
     @Test
+    void getAllSurveys() throws JSONException {
+
+        String uri = "/surveys";
+
+        String expectedResponse = """
+                    [
+                        {
+                            "id": 1
+                        }
+                    ]
+                """;
+
+        ResponseEntity<String> actualResponse = template.getForEntity(uri, String.class);
+
+        // Status Code
+        assertTrue(actualResponse.getStatusCode().is2xxSuccessful());
+
+        // JSON Format
+        assertEquals("application/json", actualResponse.getHeaders().get("Content-Type").get(0));
+
+        // Response Body
+        JSONAssert.assertEquals(expectedResponse, actualResponse.getBody(), false); // Only the selected json values are required
+    }
+
+    @Test
+    void getSurveyById_survey1() throws JSONException {
+
+        String uri = "/surveys/1";
+
+        String expectedResponse = """
+                   {
+                       "id": 1,
+                       "name": "My Favorite Survey",
+                       "description": "Description of the Survey"
+                   }
+                """;
+
+        ResponseEntity<String> actualResponse = template.getForEntity(uri, String.class);
+
+        assertTrue(actualResponse.getStatusCode().is2xxSuccessful());
+
+        assertEquals("application/json", actualResponse.getHeaders().get("Content-Type").get(0));
+
+        JSONAssert.assertEquals(expectedResponse, actualResponse.getBody(), false);
+    }
+
+    @Test
     void getAllQuestionsBySurveyId_survey1() throws JSONException {
 
         String uri = "/surveys/1/questions";
@@ -39,14 +86,11 @@ public class SurveyResourceTest {
 
         ResponseEntity<String> actualResponse = template.getForEntity(uri, String.class);
 
-        // Status Code
         assertTrue(actualResponse.getStatusCode().is2xxSuccessful());
 
-        // JSON Format
         assertEquals("application/json", actualResponse.getHeaders().get("Content-Type").get(0));
 
-        // Response Body
-        JSONAssert.assertEquals(expectedResponse, actualResponse.getBody(), false); // Only the selected json values are required
+        JSONAssert.assertEquals(expectedResponse, actualResponse.getBody(), false);
     }
 
     @Test
