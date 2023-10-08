@@ -19,19 +19,25 @@ public class SurveyResourceTest {
     TestRestTemplate template;
 
     @Test
-    void getQuestionById_question1() throws JSONException {
+    void getAllQuestionsBySurveyId_survey1() throws JSONException {
 
-        String questionUri = "/surveys/1/questions/1";
+        String uri = "/surveys/1/questions";
 
         String expectedResponse = """
-            {
-                "id": 1,
-                "description": "Most Popular Cloud Platform Today",
-                "correctAnswer": "AWS"
-            }
-            """;
+                    [
+                        {
+                            "id": 1
+                        },
+                        {
+                            "id": 2
+                        },
+                        {
+                            "id": 3
+                        }
+                    ]
+                """;
 
-        ResponseEntity<String> actualResponse = template.getForEntity(questionUri, String.class);
+        ResponseEntity<String> actualResponse = template.getForEntity(uri, String.class);
 
         // Status Code
         assertTrue(actualResponse.getStatusCode().is2xxSuccessful());
@@ -40,6 +46,34 @@ public class SurveyResourceTest {
         assertEquals("application/json", actualResponse.getHeaders().get("Content-Type").get(0));
 
         // Response Body
-        JSONAssert.assertEquals(expectedResponse, actualResponse.getBody(), false);
+        JSONAssert.assertEquals(expectedResponse, actualResponse.getBody(), false); // Only the selected json values are required
+    }
+
+    @Test
+    void getQuestionById_question1() throws JSONException {
+
+        String uri = "/surveys/1/questions/1";
+
+        String expectedResponse = """
+                    {
+                        "id": 1,
+                        "description": "Most Popular Cloud Platform Today",
+                        "options": [
+                            "AWS",
+                            "Azure",
+                            "Google Cloud",
+                            "Oracle Cloud"
+                        ],
+                        "correctAnswer": "AWS"
+                    }
+                """;
+
+        ResponseEntity<String> actualResponse = template.getForEntity(uri, String.class);
+
+        assertTrue(actualResponse.getStatusCode().is2xxSuccessful());
+
+        assertEquals("application/json", actualResponse.getHeaders().get("Content-Type").get(0));
+
+        JSONAssert.assertEquals(expectedResponse, actualResponse.getBody(), true); // All the json values are required
     }
 }
